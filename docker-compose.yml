@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  openldap:
+    image: bitnami/openldap:latest
+    container_name: openldap
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - LDAP_ROOT=${LDAP_ROOT}
+      - LDAP_ADMIN_USERNAME=${LDAP_ADMIN_USERNAME}
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - LDAP_USERS=${LDAP_USERS}
+      - LDAP_PASSWORDS=${LDAP_PASSWORDS}
+      - LDAP_GROUP=${LDAP_GROUP}
+      - LDAP_ENABLE_TLS=${LDAP_ENABLE_TLS}
+    ports:
+      - "${LDAP_PORT}:1389"
+      - "${LDAPS_PORT}:1636"
+    volumes:
+      - ./ldif:/ldifs
+      - openldap_data:/bitnami/openldap
+
+volumes:
+  openldap_data:
+    driver: local
