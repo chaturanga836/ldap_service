@@ -23,8 +23,11 @@ services:
     image: osixia/phpldapadmin:0.9.0
     container_name: ldap-admin-ui
     environment:
-      PHPLDAPADMIN_LDAP_HOSTS: ldap-server
+      PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
       PHPLDAPADMIN_HTTPS: "false"
+      PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
+      PHPLDAPADMIN_HTTPS_PORT: 443
+      PHPLDAPADMIN_LDAP_PORT: 389
     ports:
       - "8081:80"
     depends_on:
