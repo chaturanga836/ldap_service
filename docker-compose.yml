@@ -15,7 +15,7 @@ services:
     volumes:
       - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
     networks:
-      - ldap_net
+      - ldap_network
     command: --copy-service
     restart: unless-stopped
 
@@ -31,11 +31,11 @@ services:
     ports:
       - "8081:80"
     networks:
-      - ldap_net
+      - ldap_network
     depends_on:
       - ldap-server
     restart: unless-stopped
 
 networks:
-  default:
-    name: ldap_net
+  ldap_network:
+    driver: bridge
