@@ -11,7 +11,7 @@ services:
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
       LDAP_TLS: "false"
     ports:
-      - "1389:1389"   
+       - "1389:389"   
     volumes:
       - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
     networks:
