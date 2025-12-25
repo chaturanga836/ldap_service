@@ -11,7 +11,7 @@ services:
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
       LDAP_TLS: "false"
     ports:
-       - "1389:389"   
+       - "389:389"   
     volumes:
       - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
     networks:
@@ -27,7 +27,7 @@ services:
       PHPLDAPADMIN_HTTPS: "false"
       PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
       PHPLDAPADMIN_HTTPS_PORT: 443
-      PHPLDAPADMIN_LDAP_PORT: 389
+      PHPLDAPADMIN_LDAP_PORT: 1389
     ports:
       - "8081:80"
     networks:
