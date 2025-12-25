@@ -27,7 +27,7 @@ services:
       PHPLDAPADMIN_HTTPS: "false"
       PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
       PHPLDAPADMIN_HTTPS_PORT: 443
-      PHPLDAPADMIN_LDAP_PORT: 1389
+      PHPLDAPADMIN_LDAP_PORT: 389
     ports:
       - "8081:80"
     networks:
