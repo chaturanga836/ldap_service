@@ -48,3 +48,24 @@ sn: Schmidt
 uid: peter.schmidt
 mail: peter.schmidt@example.com
 userPassword: password789
+
+# Organizational unit for groups
+dn: ou=Groups,dc=example,dc=com
+changetype: add
+objectClass: organizationalUnit
+ou: Groups
+
+# Group: IT Users
+dn: cn=it_users,ou=Groups,dc=example,dc=com
+changetype: add
+objectClass: groupOfNames
+cn: it_users
+member: uid=johndoe,ou=IT,dc=example,dc=com
+member: uid=anna.meier,ou=IT,dc=example,dc=com
+
+# Group: Marketing Users
+dn: cn=marketing_users,ou=Groups,dc=example,dc=com
+changetype: add
+objectClass: groupOfNames
+cn: marketing_users
+member: uid=peter.schmidt,ou=Marketing,dc=example,dc=com
