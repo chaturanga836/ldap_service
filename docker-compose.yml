@@ -12,14 +12,15 @@ services:
       LDAP_TLS: "true"
       LDAP_TLS_CRT_FILENAME: "ldap.crt"
       LDAP_TLS_KEY_FILENAME: "ldap.key"
-      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
-      # KEEP_EXISTING_CONFIG: "true"
+      KEEP_EXISTING_CONFIG: "true"
     ports:
       - "389:389"
       - "636:636"
     volumes:
-      - ldap_bootstrap_data:/container/service/slapd/assets/config/bootstrap/ldif/custom
-      - ldap_certs_data:/container/service/slapd/assets/certs
+      - ldap_data:/var/lib/ldap
+      - ldap_config:/etc/ldap/slapd.d
+      - ldap_certs:/container/service/slapd/assets/certs
+      - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
     networks:
       - ldap_network
     # restart: unless-stopped
@@ -43,6 +44,8 @@ services:
 networks:
   ldap_network:
     driver: bridge
+
 volumes:
-  ldap_certs_data:
-  ldap_bootstrap_data:
+  ldap_data:
+  ldap_config:
+  ldap_certs:
