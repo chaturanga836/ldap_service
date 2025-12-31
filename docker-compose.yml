@@ -45,3 +45,4 @@ networks:
 volumes:
   ldap_data:
   ldap_config:
+  ldap_certs:
