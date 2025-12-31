@@ -57,5 +57,10 @@ with open('ldap/certs/ldap-server.key', 'wb') as f:
 with open('ldap/certs/ldap-server.crt', 'wb') as f:
     f.write(cert.public_bytes(serialization.Encoding.PEM))
 
+# For self-signed, CA cert is the same as the server cert
+with open('ldap/certs/ca.crt', 'wb') as f:
+    f.write(cert.public_bytes(serialization.Encoding.PEM))
+
 print("✓ Generated ldap/certs/ldap-server.crt")
 print("✓ Generated ldap/certs/ldap-server.key")
+print("✓ Generated ldap/certs/ca.crt")
