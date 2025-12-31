@@ -13,7 +13,7 @@ services:
       LDAP_TLS_CRT_FILENAME: "ldap.crt"
       LDAP_TLS_KEY_FILENAME: "ldap.key"
       LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
-
+      # KEEP_EXISTING_CONFIG: "true"
     ports:
       - "389:389"
       - "636:636"
