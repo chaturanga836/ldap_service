@@ -9,9 +9,12 @@ services:
       LDAP_ORGANISATION: "${LDAP_DOMAIN}"
       LDAP_DOMAIN: "${LDAP_DOMAIN}"
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
-      LDAP_TLS: "false"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap-server.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap-server.key"
     ports:
-       - "389:389"   
+       - "389:389"
+       - "636:636"
     volumes:
       - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
     networks:
