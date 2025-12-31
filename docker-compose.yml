@@ -18,7 +18,7 @@ services:
       - "389:389"
       - "636:636"
     volumes:
-      - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
+      - ldap_bootstrap_data:/container/service/slapd/assets/config/bootstrap/ldif/custom
       - ldap_certs_data:/container/service/slapd/assets/certs
     networks:
       - ldap_network
@@ -45,3 +45,4 @@ networks:
     driver: bridge
 volumes:
   ldap_certs_data:
+  ldap_bootstrap_data:
