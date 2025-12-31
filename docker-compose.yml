@@ -15,17 +15,14 @@ services:
       LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
       KEEP_EXISTING_CONFIG: "true"
     ports:
-       - "389:389"
-       - "636:636"
+      - "389:389"
+      - "636:636"
     volumes:
       - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
-      - ./ldap/certs/ldap-server.crt:/container/service/slapd/assets/certs/ldap.crt
-      - ./ldap/certs/ldap-server.key:/container/service/slapd/assets/certs/ldap.key
-      - ./ldap/certs/ca.crt:/container/service/slapd/assets/certs/ca.crt
+      - ldap_certs_data:/container/service/slapd/assets/certs
     networks:
       - ldap_network
-    restart: unless-stopped
-
+    # restart: unless-stopped
   ldap-admin-ui:
     image: osixia/phpldapadmin:0.9.0
     container_name: ldap-admin-ui
@@ -46,3 +43,5 @@ services:
 networks:
   ldap_network:
     driver: bridge
+volumes:
+  ldap_certs_data:
