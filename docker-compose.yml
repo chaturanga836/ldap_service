@@ -10,13 +10,15 @@ services:
       LDAP_DOMAIN: "${LDAP_DOMAIN}"
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
       LDAP_TLS: "true"
-      # LDAP_TLS_CRT_FILENAME: "ldap-server.crt"
-      # LDAP_TLS_KEY_FILENAME: "ldap-server.key"
+      LDAP_TLS_CRT_FILENAME: "ldap-server.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap-server.key"
     ports:
        - "389:389"
        - "636:636"
     volumes:
       - ./ldap/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
+      - ./ldap/certs/ldap-server.crt:/container/service/slapd/assets/certs/ldap-server.crt
+      - ./ldap/certs/ldap-server.key:/container/service/slapd/assets/certs/ldap-server.key
     networks:
       - ldap_network
     command: --copy-service
