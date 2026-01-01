@@ -27,11 +27,15 @@ services:
     container_name: ldap-admin-ui
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
+      PHPLDAPADMIN_LDAP_PORT: 636
       PHPLDAPADMIN_HTTPS: "false"
       PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
-      PHPLDAPADMIN_LDAP_PORT: 389
+      # Explicit LDAPS URI to ensure phpLDAPadmin uses LDAPS
+      PHPLDAPADMIN_LDAP_URI: "ldaps://ldap-server:636"
     ports:
       - "8081:80"
+    volumes:
+      - ./ldap/certs/ca.crt:/container/service/phpldapadmin/assets/certs/ca.crt:ro
     networks:
       - ldap_network
     depends_on:
