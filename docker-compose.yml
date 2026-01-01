@@ -1,6 +1,6 @@
 services:
   ldap-server:
-    image: osixia/openldap:1.5.0
+    build: .
     container_name: ldap-server
     environment:
       LDAP_BASE_DN: "${LDAP_ROOT}"
@@ -10,7 +10,7 @@ services:
       LDAP_TLS: "true"
       LDAP_TLS_CRT_FILENAME: "ldap.crt"
       LDAP_TLS_KEY_FILENAME: "ldap.key"
-      # KEEP_EXISTING_CONFIG: "true"
+      KEEP_EXISTING_CONFIG: "false"
     ports:
       - "389:389"
       - "636:636"
@@ -18,7 +18,7 @@ services:
       - ldap_data:/var/lib/ldap
       - ldap_config:/etc/ldap/slapd.d
       - ldap_certs:/container/service/slapd/assets/certs
-      - ldap_bootstrap:/container/service/slapd/assets/config/bootstrap/ldif
+      # - ldap_bootstrap:/container/service/slapd/assets/config/bootstrap/ldif
     networks:
       - ldap_network
     # restart: unless-stopped
@@ -51,5 +51,4 @@ volumes:
   ldap_data:
   ldap_config:
   ldap_certs:
-  ldap_bootstrap:
-  # ldap_bootstrap_ldif:
+
