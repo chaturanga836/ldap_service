@@ -10,7 +10,7 @@ services:
       LDAP_TLS: "true"
       LDAP_TLS_CRT_FILENAME: "ldap.crt"
       LDAP_TLS_KEY_FILENAME: "ldap.key"
-      KEEP_EXISTING_CONFIG: "true"
+      # KEEP_EXISTING_CONFIG: "true"
     ports:
       - "389:389"
       - "636:636"
