@@ -18,7 +18,7 @@ services:
       - ldap_data:/var/lib/ldap
       - ldap_config:/etc/ldap/slapd.d
       - ldap_certs:/container/service/slapd/assets/certs
-      - ldap_bootstrap_custom:/container/service/slapd/assets/config/bootstrap/ldif/custom
+      - ldap_bootstrap:/container/service/slapd/assets/config/bootstrap/ldif
     networks:
       - ldap_network
     # restart: unless-stopped
@@ -51,5 +51,5 @@ volumes:
   ldap_data:
   ldap_config:
   ldap_certs:
-  ldap_bootstrap_custom:
+  ldap_bootstrap:
   # ldap_bootstrap_ldif:
