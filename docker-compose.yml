@@ -8,8 +8,11 @@ services:
       LDAP_DOMAIN: "${LDAP_DOMAIN}"
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
       LDAP_TLS: "true"
+      # These must match the filenames COPIED in the Dockerfile
       LDAP_TLS_CRT_FILENAME: "ldap.crt"
       LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_VERIFY_CLIENT: "never"
       KEEP_EXISTING_CONFIG: "false"
     ports:
       - "389:389"
@@ -17,31 +20,25 @@ services:
     volumes:
       - ldap_data:/var/lib/ldap
       - ldap_config:/etc/ldap/slapd.d
-      - ldap_certs:/container/service/slapd/assets/certs
-      # - ldap_bootstrap:/container/service/slapd/assets/config/bootstrap/ldif
     networks:
       - ldap_network
-    # restart: unless-stopped
 
   ldap-admin-ui:
     image: osixia/phpldapadmin:0.9.0
     container_name: ldap-admin-ui
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
-      PHPLDAPADMIN_LDAP_PORT: 636
       PHPLDAPADMIN_HTTPS: "false"
       PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
-      # Explicit LDAPS URI to ensure phpLDAPadmin uses LDAPS
+      # Use LDAPS for the internal connection
       PHPLDAPADMIN_LDAP_URI: "ldaps://ldap-server:636"
-    ports:
-      - "8081:80"
     volumes:
+      # Map your CA so the UI trusts the server
       - ./ldap/certs/ca.crt:/container/service/phpldapadmin/assets/certs/ca.crt:ro
     networks:
       - ldap_network
     depends_on:
       - ldap-server
-    # restart: unless-stopped
 
 networks:
   ldap_network:
@@ -50,5 +47,3 @@ networks:
 volumes:
   ldap_data:
   ldap_config:
-  ldap_certs:
-
