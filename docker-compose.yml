@@ -1,20 +1,22 @@
 services:
   ldap-server:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile # Assuming you name it Dockerfile
     container_name: ldap-server
-    hostname: ec2-65-0-150-75.ap-south-1.compute.amazonaws.com  # Match the 'CN' in your tls.crt
+    hostname: ldap-server
     environment:
       LDAP_BASE_DN: "${LDAP_ROOT}"
       LDAP_ORGANISATION: "${LDAP_DOMAIN}"
       LDAP_DOMAIN: "${LDAP_DOMAIN}"
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
       LDAP_TLS: "true"
-      # Sync these with the files you COPY in your Dockerfile
       LDAP_TLS_CRT_FILENAME: "tls.crt"
       LDAP_TLS_KEY_FILENAME: "tls.key"
       LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
       LDAP_TLS_VERIFY_CLIENT: "never"
-      KEEP_EXISTING_CONFIG: "false" # Prevents server from demanding a cert from UI
+      LDAP_TLS_CIPHER_SUITE: "NORMAL"
+      KEEP_EXISTING_CONFIG: "false"
     ports:
       - "389:389"
       - "636:636"
@@ -31,14 +33,10 @@ services:
       - "8081:80"
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
-      PHPLDAPADMIN_HTTPS: "false" # Use HTTP for local browser access to UI
-      PHPLDAPADMIN_LDAP_BASE: "${LDAP_ROOT:-dc=example,dc=com}"
-      # Use the INTERNAL service name over LDAPS
+      PHPLDAPADMIN_HTTPS: "false"
+      PHPLDAPADMIN_LDAP_BASE: "${LDAP_ROOT}"
       PHPLDAPADMIN_LDAP_URI: "ldaps://ldap-server:636"
-      # Ignore certificate hostname mismatch if using self-signed certs
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: "never"
-    volumes:
-      - ./ldap/certs/tls.crt:/container/service/phpldapadmin/assets/certs/ca.crt:ro
     networks:
       - ldap_network
     depends_on:
