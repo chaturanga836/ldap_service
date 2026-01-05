@@ -14,8 +14,8 @@ RUN chown -R 911:911 /container/service/slapd/assets/certs && \
 
 # 4. Explicit Environment Variables
 ENV LDAP_TLS=true
-ENV LDAP_TLS_CRT_FILENAME=ldap.crt
-ENV LDAP_TLS_KEY_FILENAME=ldap.key
+ENV LDAP_TLS_CRT_FILENAME=tls.crt
+ENV LDAP_TLS_KEY_FILENAME=tls.key
 ENV LDAP_TLS_CA_CRT_FILENAME=ca.crt
 # This prevents the container from trying to verify its own cert against a CA it doesn't have yet
 ENV LDAP_TLS_VERIFY_CLIENT=never

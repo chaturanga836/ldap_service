@@ -2,24 +2,29 @@ services:
   ldap-server:
     build: .
     container_name: ldap-server
+    hostname: ec2-65-0-150-75.ap-south-1.compute.amazonaws.com  # Match the 'CN' in your tls.crt
     environment:
       LDAP_BASE_DN: "${LDAP_ROOT}"
       LDAP_ORGANISATION: "${LDAP_DOMAIN}"
       LDAP_DOMAIN: "${LDAP_DOMAIN}"
       LDAP_ADMIN_PASSWORD: "${LDAP_ADMIN_PASSWORD}"
       LDAP_TLS: "true"
-      # These must match the filenames COPIED in the Dockerfile
-      LDAP_TLS_CRT_FILENAME: "ldap.crt"
-      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      # Sync these with the files you COPY in your Dockerfile
+      LDAP_TLS_CRT_FILENAME: "tls.crt"
+      LDAP_TLS_KEY_FILENAME: "tls.key"
       LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
       LDAP_TLS_VERIFY_CLIENT: "never"
-      KEEP_EXISTING_CONFIG: "false"
+      KEEP_EXISTING_CONFIG: "false" # Prevents server from demanding a cert from UI
     ports:
       - "389:389"
       - "636:636"
     volumes:
       - ldap_data:/var/lib/ldap
       - ldap_config:/etc/ldap/slapd.d
+      # Mount them here for easy updates, or rely on the Dockerfile COPY
+      - ./ldap/certs/tls.crt:/container/service/slapd/assets/certs/tls.crt:ro
+      - ./ldap/certs/tls.key:/container/service/slapd/assets/certs/tls.key:ro
+      - ./ldap/certs/tls.crt:/container/service/slapd/assets/certs/ca.crt:ro
     networks:
       - ldap_network
 
@@ -30,13 +35,14 @@ services:
       - "8081:80"
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
-      PHPLDAPADMIN_HTTPS: "false"
-      PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
-      # Use LDAPS for the internal connection
-      PHPLDAPADMIN_LDAP_URI: "ldaps://ec2-65-0-150-75.ap-south-1.compute.amazonaws.com:636"
+      PHPLDAPADMIN_HTTPS: "false" # Use HTTP for local browser access to UI
+      PHPLDAPADMIN_LDAP_BASE: "${LDAP_ROOT:-dc=example,dc=com}"
+      # Use the INTERNAL service name over LDAPS
+      PHPLDAPADMIN_LDAP_URI: "ldaps://ldap-server:636"
+      # Ignore certificate hostname mismatch if using self-signed certs
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: "never"
     volumes:
-      # Map your CA so the UI trusts the server
-      - ./ldap/certs/ca.crt:/container/service/phpldapadmin/assets/certs/ca.crt:ro
+      - ./ldap/certs/tls.crt:/container/service/phpldapadmin/assets/certs/ca.crt:ro
     networks:
       - ldap_network
     depends_on:
