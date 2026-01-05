@@ -31,7 +31,7 @@ services:
       PHPLDAPADMIN_HTTPS: "false"
       PHPLDAPADMIN_LDAP_BASE: "${LDAP_BASE_DN:-dc=example,dc=com}"
       # Use LDAPS for the internal connection
-      PHPLDAPADMIN_LDAP_URI: "ldaps://ldap-server:636"
+      PHPLDAPADMIN_LDAP_URI: "ldaps://ec2-65-0-150-75.ap-south-1.compute.amazonaws.com:636"
     volumes:
       # Map your CA so the UI trusts the server
       - ./ldap/certs/ca.crt:/container/service/phpldapadmin/assets/certs/ca.crt:ro
