@@ -22,9 +22,9 @@ services:
       - ldap_data:/var/lib/ldap
       - ldap_config:/etc/ldap/slapd.d
       # Mount them here for easy updates, or rely on the Dockerfile COPY
-      - ./ldap/certs/tls.crt:/container/service/slapd/assets/certs/tls.crt:ro
-      - ./ldap/certs/tls.key:/container/service/slapd/assets/certs/tls.key:ro
-      - ./ldap/certs/tls.crt:/container/service/slapd/assets/certs/ca.crt:ro
+      - ./ldap/certs/tls.crt:/container/service/slapd/assets/certs/tls.crt
+      - ./ldap/certs/tls.key:/container/service/slapd/assets/certs/tls.key
+      - ./ldap/certs/tls.crt:/container/service/slapd/assets/certs/ca.crt
     networks:
       - ldap_network
 
