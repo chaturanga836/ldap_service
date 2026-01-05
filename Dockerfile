@@ -4,13 +4,12 @@ FROM osixia/openldap:1.5.0
 COPY ./ldap/bootstrap.ldif /container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
 
 # 2. Copy Certs (Note: we use the names the image expects by default or define them below)
-COPY ./ldap/certs/ldap.crt /container/service/slapd/assets/certs/ldap.crt
-COPY ./ldap/certs/ldap.key /container/service/slapd/assets/certs/ldap.key
-COPY ./ldap/certs/ldap.crt /container/service/slapd/assets/certs/ca.crt
+COPY ./ldap/certs/tls.crt /container/service/slapd/assets/certs/tls.crt
+COPY ./ldap/certs/tls.key /container/service/slapd/assets/certs/tls.key
+COPY ./ldap/certs/tls.crt /container/service/slapd/assets/certs/ca.crt
 
-# 3. Fix Permissions
 RUN chown -R 911:911 /container/service/slapd/assets/certs && \
-    chmod 600 /container/service/slapd/assets/certs/ldap.key && \
+    chmod 600 /container/service/slapd/assets/certs/tls.key && \
     chown -R 911:911 /container/service/slapd/assets/config/bootstrap/ldif/custom
 
 # 4. Explicit Environment Variables
