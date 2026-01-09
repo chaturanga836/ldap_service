@@ -44,6 +44,7 @@ services:
 
 networks:
   ldap_network:
+    name: ldap_network
     driver: bridge
 
 volumes:
